@@ -1,3 +1,5 @@
+const array = []; //Letrehozunk egy array-t array neven.
+
 /**
  * 
  * @param {string} classname Classname az osztaly neve ami egy string értéket vár
@@ -70,6 +72,31 @@ const formbutton = document.createElement('button')// Letrehoz egy button elemet
 formbutton.textContent = "Hozzáadás!"  // Beallitja a gomb szoveget Hozzaadas szovegre
 formocska.appendChild(formbutton) // Hozzaadja a formbutton elemet a formocska elemhez
 
+
+formocska.addEventListener('submit', (e) => { // Hozzaad egy eventlistener-t amely a formocska submit esemenyet figyeli
+    e.preventDefault(); // Megelozi az alapertelmezett submit viselkedest
+    const ertekobj = {} // Letrehoz egy ures objektumot amely az input mezok ertekeit fogja tarolni
+    const inputertekek = e.target.querySelectorAll('input'); // Lekeri az osszes input elemet a formocska bol
+    for(const inputertek of inputertekek ) { // Vegigiteral az inputertekek elemein
+        ertekobj[inputertek.id] = inputertek.value // Az input id-t kulcsnak es az erteket erteknek tarolja az objektumban
+    }
+    
+    array.push(ertekobj) // Hozzaadja az ertekobj objektumot az array hoz
+    const asztalsor = document.createElement('tr') // Letrehoz egy tr elemet es eltárolja az asztalsor valtozoban
+    tbody.appendChild(asztalsor) // Hozzaadja az asztalsor elemet a tbody hoz
+
+    const writercella = document.createElement('td') // Letrehoz egy td elemet es eltárolja a writercella valtozoban
+    writercella.textContent = ertekobj.Writer; // Beallitja a td elem szoveget az ertekobj Writer ertekere
+    asztalsor.appendChild(writercella) // Hozzaadja a writercella elemet az asztalsor hoz
+
+    const genrecella = document.createElement('td') // Letrehoz egy td elemet es eltárolja a genrecella valtozoban
+    genrecella.textContent = ertekobj.Genre; // Beallitja a td elem szoveget az ertekobj Genre ertekere
+    asztalsor.appendChild(genrecella)  // Hozzaadja a genrecella elemet az asztalsor hoz
+
+    const titlecella = document.createElement('td') // Letrehoz egy td elemet es eltárolja a titlecella valtozoban
+    titlecella.textContent = ertekobj.Genre; // Beallitja a td elem szoveget az ertekobj Genre ertekere
+    asztalsor.appendChild(titlecella) // Hozzaadja a titlecella elemet az asztalsor hoz
+})
 
 
 containerDivecske.appendChild(tabledivecske) // A 'form' divhez hozzaadjuk a 'table' divet.
