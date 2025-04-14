@@ -7,5 +7,15 @@
 }
 
 .form {
-    background-color: purple;
+    margin-top: 20px;
+    background-color: rgb(26, 42, 112);
+}
+
+table, tr, th, td {
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+
+.field{
+    background-color: rgb(150, 87, 62)
 }
