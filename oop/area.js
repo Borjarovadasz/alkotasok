@@ -2,8 +2,8 @@
  * Az area osztály diveket hoz létre amit egy tetszőleges containerhez hozzáfűz.
  */
 class Area { // Egy class Area neven
-    #div; //Letrehozunk egy privat div-et
-    
+    #div; //Let rehozunk egy privat div-et
+    #manager;
     /**
      * Getter a privat valtozohoz
      * @returns {HTMLDivElement} Ezt adja vissza
@@ -11,14 +11,20 @@ class Area { // Egy class Area neven
     get div() { // Egy getter ami visszaadja a div elemet
         return this.#div;  // Visszaadja a privat #div elemet ami az osztaly resze
     }
-    
+    /**
+     * @returns {Manager}
+     */
+    get manager() {
+        return this.#manager
+    }
     
     /**
-     * 
+     *  @param {Manager} manager A manager objektum ami a Person objektumokat kezeli
      * @param {string} className A constructor bejovo erteke a classname ami egy string
      * 
      */
-    constructor(className) { // Egy constructor fuggveny ami egy classname parametert var
+    constructor(className, manager) { // Egy constructor fuggveny ami egy classname parametert var
+        this.#manager = manager;//Beallitjuk a manager privat valtozot a parameterre
         const container = this.#getcontainerdiv();
         this.#div = document.createElement('div')
         this.#div.className = className; // Beallitja a privat #div osztalynevet a kapott classname ertekere
@@ -45,11 +51,36 @@ class Asztal extends Area {
     /**
      * Ez a konstruktor urlapot hoz letre mezokkel, es hozzaadja a szulo div elemhez.
      * @param {string} className  A parameter ami egy string tipusu erteket var className neven
+     * @param {Manager} manager A manager objektum ami a Person objektumokat kezeli
      */
-    constructor(className) {// Egy constructor fuggveny ami egy styleclass parametert var
-        super(className); // Meghivja a szuloosztaly constructor fuggvenyet a styleclass parameterrel
+    constructor(className, manager) {// Egy constructor fuggveny ami egy styleclass parametert var
+        super(className, manager); // Meghivja a szuloosztaly constructor fuggvenyet a styleclass parameterrel
         const tableBody = this.#asztalletrehozas(); 
+        this.manager.setAddpersonCall((ember) => {
+
+            const tablerow = document.createElement('tr')
+
+            const wcell = document.createElement('td')
+            wcell.textContent = ember.writer
+            tableBody.appendChild(wcell)
+
+            
+            const gcell = document.createElement('td')
+            gcell.textContent = ember.genre
+            tableBody.appendChild(gcell)
+
+            const tcell = document.createElement('td')
+            tcell.textContent = ember.title
+            tableBody.appendChild(tcell)
+            tableBody.appendChild(tablerow)
+        
+        })
     }
+
+     /**
+      * Ez a fuggveny letrehoz egy tablat fejleccel es visszater a tbodyval
+      * @returns {HTMLTableSectionElement} A tableBody elememel ter vissza ami egy HTMLTableSectionElement
+      */
     #asztalletrehozas() {
         const asztal = document.createElement('table') // Letrehoz egy table elemet es eltárolja az asztal valtozoban
         this.div.appendChild(asztal) // Hozzaadja az asztal elemet a div elemhez amely a jelenlegi osztalyhoz tartozik
@@ -79,9 +110,11 @@ class Form extends Area { // Egy class Form ami az Area osztalybol oroklodik
     /**
      * Ez a konstruktor letrehoz egy urlapot sok mezovel amikhez a szulo ertekeit hozzadja.
      * @param {string} className   A parameter ami egy string tipusu erteket var className neven
+     * @param {Array} fieldecske
+     * @param {Manager} manager
      */
-    constructor(className, felementlist) { // Egy constructor fuggveny ami egy classname parametert var
-        super(className) // Meghivja az oszto osztaly constructorat
+    constructor(className, felementlist, manager) { // Egy constructor fuggveny ami egy classname parametert var
+        super(className, manager) // Meghivja az oszto osztaly constructorat
         const formocsoka = document.createElement('form')  // Letrehoz egy form elemet es eltarolja a formocsoka valtozoban
         this.div.appendChild(formocsoka) // Hozzaadja a form elemet a div elemhez
         
@@ -98,7 +131,18 @@ class Form extends Area { // Egy class Form ami az Area osztalybol oroklodik
         inputocska.id = felement.fid // Beallitja az input id erteket a felement id-jere
         fieldecske.appendChild(document.createElement('br')) // Hozzaad egy sortorest a fieldecske divhez
         fieldecske.appendChild(inputocska) // Hozzaadja az input elemet a fieldecske divhez
-    }
+        fieldecske.addEventListener('submit', (e)=> { // Esemenyfigyelo hozzaadasa a submit esemenyhez
+            e.preventDefault() // Megakadalyozza az alapertelmezett urlap bekuldest
+            const iputfield = e.target.querySelectorAll('input') // Kivalasztja az osszes input mezo az urlapbol
+            const vobject = {} // Letrehoz egy ures objektumot
+            for(const element of iputfield) { // Bejarja az osszes input mezot
+                vobject[element.fid] = element.value // Hozzaadja a mezo azonositot es erteket az objektumhoz
+            }
+            
+            const ember = new Ember(vobject.writer, vobject.genre, vobject.title) // Letrehoz egy uj Ember objektumot a begyujtott adatok alapjan
+            this.manager.personadd(ember) // Hozzaadja az Ember objektumot a managerhez
+        })
+        
 
     const gomb = document.createElement('button') // Letrehoz egy button elemet es eltarolja a gomb valtozoban
     gomb.textContent = 'Hozzaadas' // Beallitja a gomb szoveget Hozzaadas ertekre
