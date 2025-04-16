@@ -56,20 +56,20 @@ class Asztal extends Area {
     constructor(className, manager) {// Egy constructor fuggveny ami egy styleclass parametert var
         super(className, manager); // Meghivja a szuloosztaly constructor fuggvenyet a styleclass parameterrel
         const tableBody = this.#asztalletrehozas(); // Letrehoz a tableBody elemet
-        this.manager.setAddpersonCall((ember) => { // Beallitja a addperson callback-et
+        this.manager.setAddpersonCall((Mu) => { // Beallitja a addperson callback-et
         
             const tablerow = document.createElement('tr'); // Letrehoz a sor elemet
         
             const wcell = document.createElement('td'); // Letrehoz a szerzo cellat
-            wcell.textContent = ember.writer; // Beallitja a szerzo cella szoveget
+            wcell.textContent = Mu.writer; // Beallitja a szerzo cella szoveget
             tableBody.appendChild(wcell); // Hozzaadja a szerzo cellat a tableBody elemhez
         
             const gcell = document.createElement('td'); // Letrehoz a mufaj cellat
-            gcell.textContent = ember.genre; // Beallitja a mufaj cella szoveget
+            gcell.textContent = Mu.genre; // Beallitja a mufaj cella szoveget
             tableBody.appendChild(gcell); // Hozzaadja a mufaj cellat a tableBody elemhez
         
             const tcell = document.createElement('td'); // Letrehoz a cim cellat
-            tcell.textContent = ember.title; // Beallitja a cim cella szoveget
+            tcell.textContent = Mu.title; // Beallitja a cim cella szoveget
             tableBody.appendChild(tcell); // Hozzaadja a cim cellat a tableBody elemhez
             tableBody.appendChild(tablerow); // Hozzaadja a sort a tableBody elemhez
         
@@ -147,8 +147,8 @@ class Form extends Area { // Egy class Form ami az Area osztalybol oroklodik
                     }
                     
                     if(valid) { // Ellenorzi hogy a valid true-e
-                        const ember = new Ember(vobject.writer, vobject.genre, vobject.title) // Letrehoz a Ember objektumot a begyujtott adatok alapjan
-                        this.manager.personadd(ember) // Hozzaadja a Ember objektumot a managerhez
+                        const Mu = new Mu(vobject.writer, vobject.title, vobject.genre) // Letrehoz a Mu objektumot a begyujtott adatok alapjan
+                        this.manager.personadd(Mu) // Hozzaadja a Mu objektumot a managerhez
                     }
                 })
             }
@@ -180,8 +180,8 @@ class Form extends Area { // Egy class Form ami az Area osztalybol oroklodik
                         for(const sor of fejtorles) { // Vegigiteral a sorokon
                             const vagottsor = sor.trim() // Vonal metszese szokoz eltavolitasaval
                             const mezok = vagottsor.split(';') // Sorokat mezokre bontja pontosvesszo szerint
-                            const ember = new Ember(mezok[0], mezok[1], mezok[2]) // Letrehoz a Ember objektumot mezok alapjan
-                            this.manager.personadd(ember) // Hozzaadja a Ember objektumot a managerhez
+                            const mu = new Mu(mezok[0], mezok[1], mezok[2]) // Letrehoz a Mu objektumot mezok alapjan
+                            this.manager.personadd(mu) // Hozzaadja a Mu objektumot a managerhez
                         }
                     }
                     fileolvaso.readAsText(file); // Beolvassa a fajlt szovegkent

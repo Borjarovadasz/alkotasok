@@ -10,7 +10,7 @@ class Manager{ // Osztaly definialasa Manager neven
     /**
      * 
      * @param {Function} callback // Callback fuggveny tipus meghatarozasa
-     * @callback {ember} // Emberre vonatkozo callback definialasa
+     * @callback {mu} // Mure vonatkozo callback definialasa
      */
     setAddpersonCall(callback){ // Callback fuggveny beallitasa
         this.#addpersoncallback = callback // Privat fuggveny hivatkozas hozzarendelve
@@ -18,10 +18,10 @@ class Manager{ // Osztaly definialasa Manager neven
 
      /**
       * 
-      * @param {Ember} ember // Ember tipusu parameter megadasa
+      * @param {Mu} mu // Mu tipusu parameter megadasa
       */
-    personadd(ember) { // Uj szemely hozzaadasa
-        this.#array.push(ember) // Uj szemely hozzaadasa a tombhoz
-        this.#addpersoncallback(ember) // Privat callback fuggveny futtatasa az uj szemellyel
+    personadd(mu) { // Uj szemely hozzaadasa
+        this.#array.push(mu) // Uj szemely hozzaadasa a tombhoz
+        this.#addpersoncallback(mu) // Privat callback fuggveny futtatasa az uj szemellyel
     }
 }

@@ -18,3 +18,5 @@ const manager =new Manager()
 const asztal = new Asztal('table', manager); // Letrehoz egy uj Area objektumot 'table' osztalynevvel, managert rakjuk bele es eltarolja az asztal valtozoban
 const form = new Form('form', felementlist, manager);// Letrehoz egy uj Area objektumot 'form' osztalynevvel es eltarolja a form valtozoban
 const filefeltoltes = new Feltoles('upload', manager)
+
+

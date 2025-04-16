@@ -1,4 +1,4 @@
-class Ember{ // Osztaly definialasa Ember neven
+class Mu{ // Osztaly definialasa Ember neven
     #writer // Privat attributum a szerzo szamara
     #genre // Privat attributum a mufaj szamara
     #title // Privat attributum a cim szamara

@@ -129,32 +129,48 @@ filebeillesztes.addEventListener('change', (e) => { // Esemenyfigyelo hozzaadasa
         for(const line of fejremove){ // Vegigiteral a sorokon
             const metszettvonal = line.trim(); // Vonal metszese szokoz eltavolitasaval
             const mezok = metszettvonal.split(';'); // Sorokat mezokre bontja pontosvesszo szerint
-            const ember = { // Ember objektum letrehozasa
+            const mu = { // Ember objektum letrehozasa
                 writer: mezok[0],
                 genre: mezok[1],
                 title: mezok[2]
             }
-            array.push(ember); // Hozzaadja a Ember objektumot az array-hez
+            array.push(mu); // Hozzaadja a Ember objektumot az array-hez
             const tablerow = document.createElement('tr'); // Letrehoz a sor elemet
             tbody.appendChild(tablerow); // Hozzaadja a sort a tbody-hoz
             
             const wcell = document.createElement('td'); // Letrehoz a szerzo cellat
-            wcell.textContent = ember.writer; // Beallitja a szerzo cella szoveget
+            wcell.textContent = mu.writer; // Beallitja a szerzo cella szoveget
             tablerow.appendChild(wcell); // Hozzaadja a szerzo cellat a sorhoz
         
             const gcell = document.createElement('td'); // Letrehoz a mufaj cellat
-            gcell.textContent = ember.genre; // Beallitja a mufaj cella szoveget
+            gcell.textContent = mu.genre; // Beallitja a mufaj cella szoveget
             tablerow.appendChild(gcell); // Hozzaadja a mufaj cellat a sorhoz
         
             const tcell = document.createElement('td'); // Letrehoz a cim cellat
-            tcell.textContent = ember.title; // Beallitja a cim cella szoveget
+            tcell.textContent = mu.title; // Beallitja a cim cella szoveget
             tablerow.appendChild(tcell); // Hozzaadja a cim cellat a sorhoz
         }
     }
     fileolvaso.readAsText(file); // Beolvassa a fajlt szovegkent
 })
 
+const exportgomb = document.createElement('button')
+exportgomb.textContent = 'Letoltés'
+containerDivecske.appendChild(exportgomb)
+exportgomb.addEventListener('click', () =>{
+    const link = document.createElement('a')
+    const contentaray = ['writer;genre;title']
+    for(const mu of array ) {
+        contentaray.push(`${mu.writer};${mu.genre};${mu.title}`)
+    }
+    const content = contentaray.join('\n')
+    const file = new Blob([content])
+    link.href =URL.createObjectURL(file)
+    link.download = 'newdata.csv'
+    link.click()
+    URL.revokeObjectURL(link.href)
 
+})
 containerDivecske.appendChild(tabledivecske) // A 'form' divhez hozzaadjuk a 'table' divet.
 containerDivecske.appendChild(formdivecske) // A 'container' divhez hozzaadjuk a 'form' divet.
 
