@@ -116,6 +116,44 @@ formocska.addEventListener('submit', (e) => { // Hozzaad egy eventlistener-t ame
    
 })
 
+const filebeillesztes = document.createElement('input') // Letrehoz a input elemet
+containerDivecske.appendChild(filebeillesztes); // Hozzaadja a input elemet a containerDivecske-hez
+filebeillesztes.id = 'fileinput' // Beallitja a input id-t fileinput-ra
+filebeillesztes.type = 'file'; // Beallitja a input tipusat file-ra
+filebeillesztes.addEventListener('change', (e) => { // Esemenyfigyelo hozzaadasa a input valtozasahoz
+    const file = e.target.files[0]; // Lekeri a elso fajlt a valtozasnal
+    const fileolvaso = new FileReader(); // Letrehoz a FileReader objektumot
+    fileolvaso.onload = () => { // Esemenyfigyelo a FileReader betoltesere
+        const filesorok = fileolvaso.result.split('\n') // Fajl tartalmat sorokra bontja
+        const fejremove = filesorok.slice(1); // Fejlec eltavolitasa
+        for(const line of fejremove){ // Vegigiteral a sorokon
+            const metszettvonal = line.trim(); // Vonal metszese szokoz eltavolitasaval
+            const mezok = metszettvonal.split(';'); // Sorokat mezokre bontja pontosvesszo szerint
+            const ember = { // Ember objektum letrehozasa
+                writer: mezok[0],
+                genre: mezok[2],
+                title: mezok[1]
+            }
+            array.push(ember); // Hozzaadja a Ember objektumot az array-hez
+            const tablerow = document.createElement('tr'); // Letrehoz a sor elemet
+            tbody.appendChild(tablerow); // Hozzaadja a sort a tbody-hoz
+            
+            const wcell = document.createElement('td'); // Letrehoz a szerzo cellat
+            wcell.textContent = ember.writer; // Beallitja a szerzo cella szoveget
+            tablerow.appendChild(wcell); // Hozzaadja a szerzo cellat a sorhoz
+        
+            const gcell = document.createElement('td'); // Letrehoz a mufaj cellat
+            gcell.textContent = ember.genre; // Beallitja a mufaj cella szoveget
+            tablerow.appendChild(gcell); // Hozzaadja a mufaj cellat a sorhoz
+        
+            const tcell = document.createElement('td'); // Letrehoz a cim cellat
+            tcell.textContent = ember.title; // Beallitja a cim cella szoveget
+            tablerow.appendChild(tcell); // Hozzaadja a cim cellat a sorhoz
+        }
+    }
+    fileolvaso.readAsText(file); // Beolvassa a fajlt szovegkent
+})
+
 
 containerDivecske.appendChild(tabledivecske) // A 'form' divhez hozzaadjuk a 'table' divet.
 containerDivecske.appendChild(formdivecske) // A 'container' divhez hozzaadjuk a 'form' divet.
