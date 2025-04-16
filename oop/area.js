@@ -55,26 +55,26 @@ class Asztal extends Area {
      */
     constructor(className, manager) {// Egy constructor fuggveny ami egy styleclass parametert var
         super(className, manager); // Meghivja a szuloosztaly constructor fuggvenyet a styleclass parameterrel
-        const tableBody = this.#asztalletrehozas(); 
-        this.manager.setAddpersonCall((ember) => {
-
-            const tablerow = document.createElement('tr')
-
-            const wcell = document.createElement('td')
-            wcell.textContent = ember.writer
-            tableBody.appendChild(wcell)
-
-            
-            const gcell = document.createElement('td')
-            gcell.textContent = ember.genre
-            tableBody.appendChild(gcell)
-
-            const tcell = document.createElement('td')
-            tcell.textContent = ember.title
-            tableBody.appendChild(tcell)
-            tableBody.appendChild(tablerow)
+        const tableBody = this.#asztalletrehozas(); // Letrehoz a tableBody elemet
+        this.manager.setAddpersonCall((ember) => { // Beallitja a addperson callback-et
         
-        })
+            const tablerow = document.createElement('tr'); // Letrehoz a sor elemet
+        
+            const wcell = document.createElement('td'); // Letrehoz a szerzo cellat
+            wcell.textContent = ember.writer; // Beallitja a szerzo cella szoveget
+            tableBody.appendChild(wcell); // Hozzaadja a szerzo cellat a tableBody elemhez
+        
+            const gcell = document.createElement('td'); // Letrehoz a mufaj cellat
+            gcell.textContent = ember.genre; // Beallitja a mufaj cella szoveget
+            tableBody.appendChild(gcell); // Hozzaadja a mufaj cellat a tableBody elemhez
+        
+            const tcell = document.createElement('td'); // Letrehoz a cim cellat
+            tcell.textContent = ember.title; // Beallitja a cim cella szoveget
+            tableBody.appendChild(tcell); // Hozzaadja a cim cellat a tableBody elemhez
+            tableBody.appendChild(tablerow); // Hozzaadja a sort a tableBody elemhez
+        
+        });
+        
     }
 
      /**
@@ -109,6 +109,7 @@ class Asztal extends Area {
 
 class Form extends Area { // Egy class Form ami az Area osztalybol oroklodik
     
+    #formfieldarray;
     /**
      * Ez a konstruktor letrehoz egy urlapot sok mezovel amikhez a szulo ertekeit hozzadja.
      * @param {string} className   A parameter ami egy string tipusu erteket var className neven
@@ -117,21 +118,15 @@ class Form extends Area { // Egy class Form ami az Area osztalybol oroklodik
      */
     constructor(className, felementlist, manager) { // Egy constructor fuggveny ami egy classname parametert var
         super(className, manager) // Meghivja az oszto osztaly constructorat
+        this.#formfieldarray = []; //
         const formocsoka = document.createElement('form')  // Letrehoz egy form elemet es eltarolja a formocsoka valtozoban
         this.div.appendChild(formocsoka) // Hozzaadja a form elemet a div elemhez
 
         for(const felement of felementlist) { // Vegigiteral a felementlist tomb elemein
-            const fieldecske = makeAdiv('field');  // Letrehoz egy field divet es eltarolja a fieldecske valtozoban
-            formocsoka.appendChild(fieldecske) // Hozzaadja a fieldecske divet a formhoz
-            const labelecske = document.createElement('label') // Letrehoz egy label elemet es eltarolja a labelecske valtozoban        
-            labelecske.htmlFor = felement.fid // Beallitja a label htmlFor erteket a felement id-jere
-            labelecske.textContent = felement.label  // Beallitja a label szoveget a felement label ertekere
-            fieldecske.appendChild(labelecske) // Hozzaadja a label elemet a fieldecske divhez
-            const inputocska = document.createElement('input') // Letrehoz egy input elemet es eltarolja az inputocska valtozoban
-            inputocska.id = felement.fid // Beallitja az input id erteket a felement id-jere
-            fieldecske.appendChild(document.createElement('br')) // Hozzaad egy sortorest a fieldecske divhez
-            fieldecske.appendChild(inputocska) // Hozzaadja az input elemet a fieldecske divhez
-      
+            const formfield = new FormField(felement.fid, felement.label)
+            this.#formfieldarray.push(formfield); // Hozzaadjuk A formfield objektumot az array-hez
+            formocsoka.appendChild(formfield.getdiv()); // Hozzaadjuk A formfield div-et a formocska elemhez
+            
         }
         
             const gomb = document.createElement('button') // Letrehoz egy button elemet es eltarolja a gomb valtozoban
@@ -146,14 +141,53 @@ class Form extends Area { // Egy class Form ami az Area osztalybol oroklodik
             }
             
             const ember = new Ember(vobject.writer, vobject.genre, vobject.title) // Letrehoz egy uj Ember objektumot a begyujtott adatok alapjan
-            console.log(ember.genre)
-            console.log(ember.writer)
-            console.log(ember.title)
             this.manager.personadd(ember) // Hozzaadja az Ember objektumot a managerhez
         })
 
     }
-        
+   
 
 }
 
+class FormField {
+    #id; // privat id valtozo
+    #inputelement; // privat input elem
+    #labelelement; // privat label elem
+    #hibaElement; // privat hiba elem
+
+
+    get id(){ // getter ami visszaadja az id erteket
+        return this.#id; // visszaadjuk az id valtozot
+    }
+
+    get value(){ // getter ami visszaadja az input element erteket
+        return this.#inputelement.value; // visszaadjuk az input mezot
+    }
+
+    set hiba(value){ // setter ami a hiba elem szoveget allitja
+        this.#hibaElement.textContent = value; // beallitjuk az error szoveget
+    }
+
+    constructor(id, labelc){ // konstruktor id es label szoveget var
+        this.#id = id; // az id beallitasa
+        this.#labelelement = document.createElement('label'); // letrehozunk egy label elemet
+        this.#labelelement.htmlFor = id; // hozzarendeljük az id-t
+        this.#labelelement.textContent = labelc; // beallitjuk a label szoveget
+        this.#inputelement = document.createElement('input'); // letrehozunk egy input elemet
+        this.#inputelement.id = id; // beallitjuk az input id-t
+        this.#hibaElement = document.createElement('span'); // letrehozunk egy span elemet
+        this.#hibaElement.className = 'error'; // beallitjuk az osztaly nevet
+    }
+
+    getdiv(){ // fuggveny ami div-t ad vissza
+        const div = makeAdiv('field'); // div letrehozasa field osztallyal
+        const bro1 = document.createElement('br') // elso sortores
+        const bro2 = document.createElement('br') // masodik sortores
+        const htmlElements = [this.#labelelement, bro1, this.#inputelement, bro2, this.#hibaElement]; // elemek listaja
+        for(const element of htmlElements){ // vegigiteralunk az elemeken
+            div.appendChild(element); // div-hez hozzadjuk az elemeket
+        }
+        return div; // visszaadjuk a div-et
+    }
+
+}
