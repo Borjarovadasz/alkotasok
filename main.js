@@ -61,10 +61,15 @@ for(const element of fieldelementek) { // Vegigiteral a fieldelementek tomb ossz
     label.htmlFor =  element.id // Beallitja a label elemhez tartozo input azonositot az element.id ertekere
      label.textContent = element.label; // Beallitja a label elemenek szoveget az element.label ertekere
      mezo.appendChild(label) // Hozzaadja a label elemet a mezo elemhez
+     mezo.appendChild(document.createElement('br')) // Appedeljük és létrehozunk egy br-t
      const input = document.createElement('input') // Letrehoz egy input elemet es eltárolja az input valtozoban
      input.id = element.id  // Beallitja az input elem azonositot az element.id ertekere
      mezo.appendChild(document.createElement('br')) // Hozzaad egy sortores elemet a mezo elemhez
      mezo.appendChild(input) // Hozzaadja az input elemet a mezo elemhez
+     mezo.appendChild(document.createElement('br')) //Hozzárakunk még egy br-t
+     const error = document.createElement('span'); //Létrehozunk egy spant-t
+     error.className = 'error'; //Span-nak a class neve error
+     mezo.appendChild(error); //Hozzárakjuk a mezőhöz az error-t
 }
 
 
@@ -77,25 +82,38 @@ formocska.addEventListener('submit', (e) => { // Hozzaad egy eventlistener-t ame
     e.preventDefault(); // Megelozi az alapertelmezett submit viselkedest
     const ertekobj = {} // Letrehoz egy ures objektumot amely az input mezok ertekeit fogja tarolni
     const inputertekek = e.target.querySelectorAll('input'); // Lekeri az osszes input elemet a formocska bol
+    let valid = true; //Valid legyen true
     for(const inputertek of inputertekek ) { // Vegigiteral az inputertekek elemein
+        const error = inputertek.parentElement.querySelector('.error'); // keressuk az error fieldet
+        if(!error){ // ha nincs error field
+            console.error('nincs errorfield'); // konzolon jelzés hogy nincs errorfield
+            return; // visszatérünk semmit sem csinálunk
+        }
+        error.textContent = ''; // error üres szövegre állítása
+        if(inputertek.value === ''){ // ha az input érték üres
+            error.textContent = 'Kotelezo megadni'; // szöveg megjelenítése hogy kötelező megadni
+            valid = false; // validáció sikertelen
+        }
         ertekobj[inputertek.id] = inputertek.value // Az input id-t kulcsnak es az erteket erteknek tarolja az objektumban
     }
+    if(valid) { // Ha valid igaz akkor
+        array.push(ertekobj) // Hozzaadja az ertekobj objektumot az array hoz
+        const asztalsor = document.createElement('tr') // Letrehoz egy tr elemet es eltárolja az asztalsor valtozoban
+        tbody.appendChild(asztalsor) // Hozzaadja az asztalsor elemet a tbody hoz
     
-    array.push(ertekobj) // Hozzaadja az ertekobj objektumot az array hoz
-    const asztalsor = document.createElement('tr') // Letrehoz egy tr elemet es eltárolja az asztalsor valtozoban
-    tbody.appendChild(asztalsor) // Hozzaadja az asztalsor elemet a tbody hoz
-
-    const writercella = document.createElement('td') // Letrehoz egy td elemet es eltárolja a writercella valtozoban
-    writercella.textContent = ertekobj.Writer; // Beallitja a td elem szoveget az ertekobj Writer ertekere
-    asztalsor.appendChild(writercella) // Hozzaadja a writercella elemet az asztalsor hoz
-
-    const genrecella = document.createElement('td') // Letrehoz egy td elemet es eltárolja a genrecella valtozoban
-    genrecella.textContent = ertekobj.Genre; // Beallitja a td elem szoveget az ertekobj Genre ertekere
-    asztalsor.appendChild(genrecella)  // Hozzaadja a genrecella elemet az asztalsor hoz
-
-    const titlecella = document.createElement('td') // Letrehoz egy td elemet es eltárolja a titlecella valtozoban
-    titlecella.textContent = ertekobj.Genre; // Beallitja a td elem szoveget az ertekobj Genre ertekere
-    asztalsor.appendChild(titlecella) // Hozzaadja a titlecella elemet az asztalsor hoz
+        const writercella = document.createElement('td') // Letrehoz egy td elemet es eltárolja a writercella valtozoban
+        writercella.textContent = ertekobj.Writer; // Beallitja a td elem szoveget az ertekobj Writer ertekere
+        asztalsor.appendChild(writercella) // Hozzaadja a writercella elemet az asztalsor hoz
+    
+        const genrecella = document.createElement('td') // Letrehoz egy td elemet es eltárolja a genrecella valtozoban
+        genrecella.textContent = ertekobj.Genre; // Beallitja a td elem szoveget az ertekobj Genre ertekere
+        asztalsor.appendChild(genrecella)  // Hozzaadja a genrecella elemet az asztalsor hoz
+    
+        const titlecella = document.createElement('td') // Letrehoz egy td elemet es eltárolja a titlecella valtozoban
+        titlecella.textContent = ertekobj.Genre; // Beallitja a td elem szoveget az ertekobj Genre ertekere
+        asztalsor.appendChild(titlecella) // Hozzaadja a titlecella elemet az asztalsor hoz
+    }
+   
 })
 
 

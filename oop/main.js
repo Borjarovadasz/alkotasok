@@ -2,15 +2,15 @@ const seperatorka = document.createElement('hr') // Letrehoz egy <hr> elemet es 
 document.body.appendChild(seperatorka) // Hozzaadja a seperatorka elemet a body elemhez
 
 const felementlist = [{ // Definial egy tombot amely tartalmazza a form mezok adatait
-    fid: 'Writer', // Az elso mezo id-je
+    fid: 'writer', // Az elso mezo id-je
     label: 'Szerzo', // Az elso mezo labelje
 },
 {
-    fid: 'Genre', // A masodik mezo id-je
+    fid: 'genre', // A masodik mezo id-je
     label: 'Mufaj', // A masodik mezo labelje
 },
 {
-    fid: 'Title', // A harmadik mezo id-je
+    fid: 'title', // A harmadik mezo id-je
     label: 'Cim', // A harmadik mezo labelje
 }
 ]

@@ -94,7 +94,9 @@ class Asztal extends Area {
             const fejcella = document.createElement('th') // Letrehoz egy th elemet es eltárolja a fejcella valtozoban
             fejcella.innerText = fejtext // Beallitja a th elem szoveget a fejtext ertekere
             headrow.appendChild(fejcella) // Hozzaadja a th elemet a tr elemhez
-        } const tableBody = document.createElement('tbody'); // Letrehozunk egy tbody elemet
+        } 
+        
+        const tableBody = document.createElement('tbody'); // Letrehozunk egy tbody elemet
         asztal.appendChild(tableBody); // Hozzaadjuk a tablehez
         return tableBody; //Visszareturolni a tablebodyt
        
@@ -117,37 +119,41 @@ class Form extends Area { // Egy class Form ami az Area osztalybol oroklodik
         super(className, manager) // Meghivja az oszto osztaly constructorat
         const formocsoka = document.createElement('form')  // Letrehoz egy form elemet es eltarolja a formocsoka valtozoban
         this.div.appendChild(formocsoka) // Hozzaadja a form elemet a div elemhez
+
+        for(const felement of felementlist) { // Vegigiteral a felementlist tomb elemein
+            const fieldecske = makeAdiv('field');  // Letrehoz egy field divet es eltarolja a fieldecske valtozoban
+            formocsoka.appendChild(fieldecske) // Hozzaadja a fieldecske divet a formhoz
+            const labelecske = document.createElement('label') // Letrehoz egy label elemet es eltarolja a labelecske valtozoban        
+            labelecske.htmlFor = felement.fid // Beallitja a label htmlFor erteket a felement id-jere
+            labelecske.textContent = felement.label  // Beallitja a label szoveget a felement label ertekere
+            fieldecske.appendChild(labelecske) // Hozzaadja a label elemet a fieldecske divhez
+            const inputocska = document.createElement('input') // Letrehoz egy input elemet es eltarolja az inputocska valtozoban
+            inputocska.id = felement.fid // Beallitja az input id erteket a felement id-jere
+            fieldecske.appendChild(document.createElement('br')) // Hozzaad egy sortorest a fieldecske divhez
+            fieldecske.appendChild(inputocska) // Hozzaadja az input elemet a fieldecske divhez
+      
+        }
         
-
-    for(const felement of felementlist) { // Vegigiteral a felementlist tomb elemein
-        const fieldecske = makeAdiv('field');  // Letrehoz egy field divet es eltarolja a fieldecske valtozoban
-        formocsoka.appendChild(fieldecske) // Hozzaadja a fieldecske divet a formhoz
-        const labelecske = document.createElement('label') // Letrehoz egy label elemet es eltarolja a labelecske valtozoban        
-        labelecske.htmlFor = felement.fid // Beallitja a label htmlFor erteket a felement id-jere
-        labelecske.textContent = felement.label  // Beallitja a label szoveget a felement label ertekere
-        fieldecske.append(labelecske) // Hozzaadja a label elemet a fieldecske divhez
-
-        const inputocska = document.createElement('input') // Letrehoz egy input elemet es eltarolja az inputocska valtozoban
-        inputocska.id = felement.fid // Beallitja az input id erteket a felement id-jere
-        fieldecske.appendChild(document.createElement('br')) // Hozzaad egy sortorest a fieldecske divhez
-        fieldecske.appendChild(inputocska) // Hozzaadja az input elemet a fieldecske divhez
-        fieldecske.addEventListener('submit', (e)=> { // Esemenyfigyelo hozzaadasa a submit esemenyhez
-            e.preventDefault() // Megakadalyozza az alapertelmezett urlap bekuldest
-            const iputfield = e.target.querySelectorAll('input') // Kivalasztja az osszes input mezo az urlapbol
-            const vobject = {} // Letrehoz egy ures objektumot
-            for(const element of iputfield) { // Bejarja az osszes input mezot
-                vobject[element.fid] = element.value // Hozzaadja a mezo azonositot es erteket az objektumhoz
+            const gomb = document.createElement('button') // Letrehoz egy button elemet es eltarolja a gomb valtozoban
+            gomb.textContent = 'Hozzaadas' // Beallitja a gomb szoveget Hozzaadas ertekre
+            formocsoka.appendChild(gomb) // Hozzaadja a gombot a formhoz
+            formocsoka.addEventListener('submit', (e)=> { // Esemenyfigyelo hozzaadasa a submit esemenyhez
+                    e.preventDefault() // Megakadalyozza az alapertelmezett urlap bekuldest
+                    const iputfield = e.target.querySelectorAll('input') // Kivalasztja az osszes input mezo az urlapbol
+                    const vobject = {} // Letrehoz egy ures objektumot
+                    for(const element of iputfield) { // Bejarja az osszes input mezot
+                        vobject[element.id] = element.value // Hozzaadja a mezo azonositot es erteket az objektumhoz
             }
             
             const ember = new Ember(vobject.writer, vobject.genre, vobject.title) // Letrehoz egy uj Ember objektumot a begyujtott adatok alapjan
+            console.log(ember.genre)
+            console.log(ember.writer)
+            console.log(ember.title)
             this.manager.personadd(ember) // Hozzaadja az Ember objektumot a managerhez
         })
+
+    }
         
 
-    const gomb = document.createElement('button') // Letrehoz egy button elemet es eltarolja a gomb valtozoban
-    gomb.textContent = 'Hozzaadas' // Beallitja a gomb szoveget Hozzaadas ertekre
-    formocsoka.appendChild(gomb) // Hozzaadja a gombot a formhoz
-    }
-
-   
 }
+
