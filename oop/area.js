@@ -134,20 +134,28 @@ class Form extends Area { // Egy class Form ami az Area osztalybol oroklodik
             formocsoka.appendChild(gomb) // Hozzaadja a gombot a formhoz
             formocsoka.addEventListener('submit', (e)=> { // Esemenyfigyelo hozzaadasa a submit esemenyhez
                     e.preventDefault() // Megakadalyozza az alapertelmezett urlap bekuldest
-                    const iputfield = e.target.querySelectorAll('input') // Kivalasztja az osszes input mezo az urlapbol
                     const vobject = {} // Letrehoz egy ures objektumot
-                    for(const element of iputfield) { // Bejarja az osszes input mezot
-                        vobject[element.id] = element.value // Hozzaadja a mezo azonositot es erteket az objektumhoz
+             
+                    let valid = true // Beallitja a valid erteket true-ra
+                    for(const formfield of this.#formfieldarray) { // Vegigiteral a formfield tomb elemein
+                        formfield.hiba = ""; // Beallitja a hiba ures ertekre
+                        if(formfield.value === "") { // Ellenorzi hogy a formfield value ures-e
+                            formfield.hiba = 'Kotelezo Megadni' // Beallitja a hiba szoveget
+                            valid = false // Beallitja a valid erteket false-ra
+                        }
+                        vobject[formfield.id] = formfield.value // Hozzaadja a mezo azonositot es erteket az objektumhoz
+                    }
+                    
+                    if(valid) { // Ellenorzi hogy a valid true-e
+                        const ember = new Ember(vobject.writer, vobject.genre, vobject.title) // Letrehoz a Ember objektumot a begyujtott adatok alapjan
+                        this.manager.personadd(ember) // Hozzaadja a Ember objektumot a managerhez
+                    }
+                })
             }
+        }
             
-            const ember = new Ember(vobject.writer, vobject.genre, vobject.title) // Letrehoz egy uj Ember objektumot a begyujtott adatok alapjan
-            this.manager.personadd(ember) // Hozzaadja az Ember objektumot a managerhez
-        })
-
-    }
-   
-
-}
+            
+    
 
 class FormField {
     #id; // privat id valtozo
