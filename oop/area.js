@@ -158,7 +158,7 @@ class Form extends Area { // Egy class Form ami az Area osztalybol oroklodik
         /**
          * Ez az osztaly az Areaból öröklődik és egy Feltöltés-t készítünk. 
          */
-        class Feltoles extends Area{ // Egy osztaly ami kiterjeszti a Area osztalyt
+        class FeltolesLetoltes extends Area{ // Egy osztaly ami kiterjeszti a Area osztalyt
 
             /**
              * Ez a konstruktor letrehoz egy urlapot sok mezovel amikhez a szulo ertekeit hozzadja.
@@ -186,8 +186,20 @@ class Form extends Area { // Egy class Form ami az Area osztalybol oroklodik
                     }
                     fileolvaso.readAsText(file); // Beolvassa a fajlt szovegkent
                 })
+                const exportgomb = document.createElement('button') // Letrehoz a gomb elemet
+                exportgomb.textContent = 'Letoltes' // Beallitja a gomb szoveget Letoltes-re
+                containerDivecske.appendChild(exportgomb) // Hozzaadja a gombot a containerDivecske-hez
+                exportgomb.addEventListener('click', () => { // Esemenyfigyelo hozzaadasa a gomb kattintasahoz
+                    const link = document.createElement('a') // Letrehoz a link elemet
+                    const content = this.manager.generateExportString() // Lekeri a exportalt tartalmat
+                    const file = new Blob([content]) // Letrehoz a blob elemet tartalommal
+                    link.href = URL.createObjectURL(file) // Letrehoz a URL-t a blobhoz
+                    link.download = 'newdata.csv' // Beallitja a letoltendo fajl nevet newdata.csv-re
+                    link.click() // Kattint a linkre hogy elinditsa a letoltest
+                    URL.revokeObjectURL(link.href) // Felszabaditja a URL eroforrasokat
+                })
             }
-        }
+        }                
            
     
 

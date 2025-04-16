@@ -24,4 +24,17 @@ class Manager{ // Osztaly definialasa Manager neven
         this.#array.push(mu) // Uj szemely hozzaadasa a tombhoz
         this.#addpersoncallback(mu) // Privat callback fuggveny futtatasa az uj szemellyel
     }
+    /**
+     * 
+     * @returns eredmeny
+     */
+    generateExportString(){ // Letrehoz a fuggvenyt ami visszater a export stringgel
+        const eredmeny = ['writer;title;genre'] // Letrehoz a tombot fejlec sorral
+        for(const mu of this.#array){ // Vegigiteral a array elemein
+            eredmeny.push(`${mu.writer};${mu.genre};${mu.title}`); // Sorokat osszefuz writer genre title mezokbol
+        }
+        return eredmeny.join('\n'); // Osszefuz a tomb elemeit uj sorral elvalasztva
+    }
+    
 }
+

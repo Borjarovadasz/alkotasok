@@ -154,23 +154,24 @@ filebeillesztes.addEventListener('change', (e) => { // Esemenyfigyelo hozzaadasa
     fileolvaso.readAsText(file); // Beolvassa a fajlt szovegkent
 })
 
-const exportgomb = document.createElement('button')
-exportgomb.textContent = 'Letoltés'
-containerDivecske.appendChild(exportgomb)
-exportgomb.addEventListener('click', () =>{
-    const link = document.createElement('a')
-    const contentaray = ['writer;genre;title']
-    for(const mu of array ) {
-        contentaray.push(`${mu.writer};${mu.genre};${mu.title}`)
+const exportgomb = document.createElement('button') // Letrehoz a gomb elemet
+exportgomb.textContent = 'Letoltes' // Beallitja a gomb szoveget Letoltes-re
+containerDivecske.appendChild(exportgomb) // Hozzaadja a gombot a containerDivecske-hez
+exportgomb.addEventListener('click', () =>{ // Esemenyfigyelo hozzaadasa a gomb kattintasahoz
+    const link = document.createElement('a') // Letrehoz a link elemet
+    const contentaray = ['writer;genre;title'] // Letrehoz a array-t fejlecekkel
+    for(const mu of array) { // Vegigiteral a tomb elemein
+        contentaray.push(`${mu.writer};${mu.genre};${mu.title}`) // Sorokat osszefuz a writer genre title mezokbol
     }
-    const content = contentaray.join('\n')
-    const file = new Blob([content])
-    link.href =URL.createObjectURL(file)
-    link.download = 'newdata.csv'
-    link.click()
-    URL.revokeObjectURL(link.href)
-
+    const content = contentaray.join('\n') // Sorokat osszefuz uj sorral elvalasztva
+    const file = new Blob([content]) // Letrehoz a blob elemet tartalommal
+    link.href = URL.createObjectURL(file) // Letrehoz a URL-t a blobhoz
+    link.download = 'newdata.csv' // Beallitja a letoltendo fajl nevet newdata.csv-re
+    link.click() // Kattint a linkre hogy elinditsa a letoltest
+    URL.revokeObjectURL(link.href) // Felszabaditja a URL eroforrasokat
 })
+
+
 containerDivecske.appendChild(tabledivecske) // A 'form' divhez hozzaadjuk a 'table' divet.
 containerDivecske.appendChild(formdivecske) // A 'container' divhez hozzaadjuk a 'form' divet.
 
