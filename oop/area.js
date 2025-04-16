@@ -89,7 +89,7 @@ class Asztal extends Area {
         const headrow = document.createElement('tr') // Letrehoz egy tr elemet sor es eltárolja a headrow valtozoban
         head.appendChild(headrow) // Hozzaadja a tr elemet a thead elemhez
     
-        const fejcellak = ['Szerzo', 'Mufaj', 'Cim'] // Egy tomb amely tartalmazza a fejlecek szoveget
+        const fejcellak = ['Szerzo', 'Cim', 'Mufaj'] // Egy tomb amely tartalmazza a fejlecek szoveget
         for(const fejtext of fejcellak) { // Vegigiteral a fejcellak tomb osszes elemen
             const fejcella = document.createElement('th') // Letrehoz egy th elemet es eltárolja a fejcella valtozoban
             fejcella.innerText = fejtext // Beallitja a th elem szoveget a fejtext ertekere
@@ -154,7 +154,41 @@ class Form extends Area { // Egy class Form ami az Area osztalybol oroklodik
             }
         }
             
-            
+
+        /**
+         * Ez az osztaly az Areaból öröklődik és egy Feltöltés-t készítünk. 
+         */
+        class Feltoles extends Area{ // Egy osztaly ami kiterjeszti a Area osztalyt
+
+            /**
+             * Ez a konstruktor letrehoz egy urlapot sok mezovel amikhez a szulo ertekeit hozzadja.
+             * @param {string} className   A parameter ami egy string tipusu erteket var className neven
+             * @param {Manager} manager
+             * */ 
+           constructor(className,manager) { // Konstruktor ami ket parameterrel dolgozik
+                super(className,manager); // Meghivja a szuloosztaly konstruktorat
+                const input = document.createElement('input') // Letrehoz a input elemet
+                input.id = 'fileinput' // Beallitja a input id-t fileinput-ra
+                input.type = 'file' // Beallitja a input tipusat file-ra
+                this.div.appendChild(input) // Hozzaadja a input elemet a div-hez
+                input.addEventListener('change', (e) => { // Esemenyfigyelo hozzaadasa a input valtozasahoz
+                    const file = e.target.files[0] // Lekeri a elso fajlt a valtozasnal
+                    const fileolvaso = new FileReader() // Letrehoz a FileReader objektumot
+                    fileolvaso.onload = () => { // Esemenyfigyelo a FileReader betoltesere
+                        const filesorok = fileolvaso.result.split('\n') // Fajl tartalmat sorokra bontja
+                        const fejtorles = filesorok.slice(1) // Fejlec eltavolitasa
+                        for(const sor of fejtorles) { // Vegigiteral a sorokon
+                            const vagottsor = sor.trim() // Vonal metszese szokoz eltavolitasaval
+                            const mezok = vagottsor.split(';') // Sorokat mezokre bontja pontosvesszo szerint
+                            const ember = new Ember(mezok[0], mezok[1], mezok[2]) // Letrehoz a Ember objektumot mezok alapjan
+                            this.manager.personadd(ember) // Hozzaadja a Ember objektumot a managerhez
+                        }
+                    }
+                    fileolvaso.readAsText(file); // Beolvassa a fajlt szovegkent
+                })
+            }
+        }
+           
     
 
 class FormField {

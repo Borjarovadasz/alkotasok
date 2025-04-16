@@ -131,8 +131,8 @@ filebeillesztes.addEventListener('change', (e) => { // Esemenyfigyelo hozzaadasa
             const mezok = metszettvonal.split(';'); // Sorokat mezokre bontja pontosvesszo szerint
             const ember = { // Ember objektum letrehozasa
                 writer: mezok[0],
-                genre: mezok[2],
-                title: mezok[1]
+                genre: mezok[1],
+                title: mezok[2]
             }
             array.push(ember); // Hozzaadja a Ember objektumot az array-hez
             const tablerow = document.createElement('tr'); // Letrehoz a sor elemet
